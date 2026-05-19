@@ -1,0 +1,704 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f8fafc;color:#1e293b;min-height:100vh}
+
+/* ===== LAYOUT ===== */
+.screen{display:none;min-height:100vh;padding:1.5rem 1rem 4rem}
+.screen.active{display:block}
+.container{max-width:680px;margin:0 auto}
+
+/* ===== TOP BAR ===== */
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:2rem}
+.topbar-back{background:none;border:1px solid #e2e8f0;border-radius:8px;padding:6px 12px;font-size:13px;color:#64748b;cursor:pointer;display:flex;align-items:center;gap:6px}
+.topbar-back:hover{background:#f1f5f9}
+.topbar-title{font-size:14px;font-weight:500;color:#475569}
+
+/* ===== HALAMAN BERANDA ===== */
+.home-header{text-align:center;padding:2rem 0 1.5rem}
+.home-logo{width:56px;height:56px;background:linear-gradient(135deg,#1e40af,#3b82f6);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 4px 12px rgba(59,130,246,.3)}
+.home-logo i{font-size:28px;color:white}
+.home-header h1{font-size:22px;font-weight:700;color:#1e293b;margin-bottom:4px}
+.home-header p{font-size:14px;color:#64748b}
+
+.role-label{font-size:12px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;text-align:center}
+
+.role-card{background:white;border:1.5px solid #e2e8f0;border-radius:16px;padding:1.5rem;margin-bottom:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:1rem}
+.role-card:hover{border-color:#3b82f6;box-shadow:0 4px 16px rgba(59,130,246,.15);transform:translateY(-1px)}
+.role-card.pegawai:hover{border-color:#3b82f6}
+.role-card.mitra:hover{border-color:#059669}
+.role-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.role-icon.blue{background:#eff6ff}
+.role-icon.green{background:#ecfdf5}
+.role-icon.blue i{font-size:26px;color:#3b82f6}
+.role-icon.green i{font-size:26px;color:#059669}
+.role-info{flex:1}
+.role-info h3{font-size:16px;font-weight:600;color:#1e293b;margin-bottom:3px}
+.role-info p{font-size:13px;color:#64748b;line-height:1.4}
+.role-arrow{color:#cbd5e1;font-size:20px}
+
+/* ===== HALAMAN PILIH LAPORAN ===== */
+.user-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:500;margin-bottom:1.5rem}
+.user-badge.pegawai{background:#eff6ff;color:#3b82f6}
+.user-badge.mitra{background:#ecfdf5;color:#059669}
+
+.menu-title{font-size:20px;font-weight:700;color:#1e293b;margin-bottom:4px}
+.menu-subtitle{font-size:13px;color:#64748b;margin-bottom:1.5rem}
+
+.laporan-card{background:white;border:1.5px solid #e2e8f0;border-radius:16px;padding:1.5rem;margin-bottom:12px;cursor:pointer;transition:all .2s}
+.laporan-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-1px)}
+.laporan-card-header{display:flex;align-items:flex-start;gap:14px}
+.laporan-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.laporan-icon.blue{background:#eff6ff} .laporan-icon.blue i{font-size:24px;color:#3b82f6}
+.laporan-icon.purple{background:#f5f3ff} .laporan-icon.purple i{font-size:24px;color:#7c3aed}
+.laporan-icon.green{background:#ecfdf5} .laporan-icon.green i{font-size:24px;color:#059669}
+.laporan-card h3{font-size:15px;font-weight:600;color:#1e293b;margin-bottom:4px}
+.laporan-card p{font-size:13px;color:#64748b;line-height:1.5}
+.laporan-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:1rem;padding-top:1rem;border-top:1px solid #f1f5f9}
+.laporan-tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;padding:3px 8px;border-radius:20px;background:#f1f5f9;color:#64748b;font-weight:500}
+.tag.blue{background:#eff6ff;color:#3b82f6}
+.tag.purple{background:#f5f3ff;color:#7c3aed}
+.tag.green{background:#ecfdf5;color:#059669}
+.laporan-cta{font-size:13px;font-weight:500;color:#3b82f6;display:flex;align-items:center;gap:4px}
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar{height:3px;background:#e2e8f0;border-radius:2px;margin-bottom:1.5rem;overflow:hidden}
+.progress-fill{height:100%;background:#3b82f6;border-radius:2px;transition:width .3s}
+
+/* ===== STEP NAV ===== */
+.step-nav{display:flex;gap:0;margin-bottom:1.5rem;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
+.step-btn{flex:1;padding:9px 4px;font-size:11.5px;font-weight:500;border:none;background:white;color:#94a3b8;cursor:pointer;border-right:1px solid #e2e8f0;transition:all .15s;line-height:1.3}
+.step-btn:last-child{border-right:none}
+.step-btn.active{background:#eff6ff;color:#3b82f6;font-weight:600}
+
+/* ===== FORM CARDS ===== */
+.section-card{background:white;border:1px solid #e2e8f0;border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.section-title{font-size:14px;font-weight:600;color:#334155;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.field-group{margin-bottom:1rem}
+.field-label{font-size:12px;font-weight:500;color:#64748b;margin-bottom:6px;display:block}
+.req{color:#ef4444}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:8px 10px;font-size:14px;border:1px solid #e2e8f0;border-radius:8px;background:white;color:#1e293b;font-family:inherit;outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:#3b82f6}
+textarea{resize:vertical;min-height:80px;line-height:1.5}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* ===== TABLE ENTRIES ===== */
+.table-entry{border:1px solid #e2e8f0;border-radius:8px;padding:1rem;margin-bottom:10px;position:relative;background:#f8fafc}
+.table-entry-num{font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em}
+.btn-add{display:flex;align-items:center;gap:6px;font-size:13px;color:#3b82f6;background:none;border:1.5px dashed #bfdbfe;border-radius:8px;padding:8px 14px;cursor:pointer;width:100%;justify-content:center;margin-top:4px;transition:all .15s}
+.btn-add:hover{background:#eff6ff}
+.btn-remove{position:absolute;top:8px;right:8px;background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;padding:2px 6px;opacity:.6}
+.btn-remove:hover{opacity:1}
+
+/* ===== FOTO ===== */
+.upload-area{border:1.5px dashed #cbd5e1;border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;background:#f8fafc;transition:all .15s}
+.upload-area:hover{border-color:#3b82f6;background:#f0f7ff}
+.upload-area input{display:none}
+.upload-area p{font-size:13px;color:#64748b;margin-top:6px}
+.upload-area .hint{font-size:11px;color:#94a3b8;margin-top:3px}
+.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.photo-item{border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;background:white}
+.photo-item img{width:100%;height:130px;object-fit:cover;display:block}
+.photo-item-header{display:flex;align-items:center;justify-content:space-between;padding:6px 8px 0}
+.photo-item-header span{font-size:11px;font-weight:600;color:#94a3b8}
+.btn-rm-photo{background:none;border:none;color:#ef4444;cursor:pointer;font-size:13px;padding:2px 6px}
+.photo-item-body{padding:8px}
+.photo-item-body input{font-size:12px;padding:5px 7px}
+
+/* ===== DOC UPLOAD ===== */
+.doc-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;margin-top:8px;background:#f8fafc}
+.doc-icon{font-size:20px;color:#94a3b8}
+.doc-name{font-size:13px;color:#334155;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-size{font-size:11px;color:#94a3b8}
+.doc-badge{font-size:10px;padding:2px 7px;border-radius:20px;background:#eff6ff;color:#3b82f6;font-weight:600}
+.btn-rm-doc{background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;padding:2px 8px;margin-left:auto}
+
+/* ===== NAV BUTTONS ===== */
+.nav-btns{display:flex;gap:10px;margin-top:1.5rem}
+.btn-prev{flex:1;padding:10px;font-size:14px;font-weight:500;border:1px solid #e2e8f0;border-radius:10px;background:none;color:#64748b;cursor:pointer}
+.btn-next{flex:2;padding:10px;font-size:14px;font-weight:600;border:none;border-radius:10px;background:#3b82f6;color:white;cursor:pointer;transition:background .15s}
+.btn-next:hover{background:#2563eb}
+.btn-pdf{width:100%;padding:13px;font-size:14px;font-weight:600;border:none;border-radius:10px;background:#059669;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
+.btn-pdf:hover{background:#047857}
+
+/* ===== SUMMARY ===== */
+.summary-box{background:#f8fafc;border-radius:10px;padding:1rem;margin-bottom:10px}
+.summary-label{font-size:11px;color:#94a3b8;margin-bottom:3px;font-weight:500}
+.summary-value{font-size:14px;color:#1e293b;font-weight:500}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat-box{background:#f8fafc;border-radius:10px;padding:.75rem;text-align:center}
+.stat-num{font-size:24px;font-weight:700;color:#1e293b}
+.stat-lbl{font-size:11px;color:#94a3b8;margin-top:2px}
+
+/* ===== INFO NOTE ===== */
+.info-note{font-size:12px;color:#3b82f6;background:#eff6ff;border-radius:8px;padding:8px 12px;margin-bottom:1rem;display:flex;gap:8px;align-items:flex-start}
+.info-note i{flex-shrink:0;margin-top:1px}
+
+/* ===== SUCCESS CARD ===== */
+.success-card{border:1.5px solid #bbf7d0;border-radius:12px;padding:1.25rem;background:white;margin-bottom:1rem}
+.success-title{font-size:14px;font-weight:600;color:#059669;margin-bottom:.5rem;display:flex;align-items:center;gap:8px}
+</style>
+</head>
+<body>
+
+<!-- ========== SCREEN 0: BERANDA ========== -->
+<div id="screen-home" class="screen active">
+  <div class="container">
+    <div class="home-header">
+      <div class="home-logo"><i class="ti ti-file-analytics"></i></div>
+      <h1>Sistem Laporan BPS</h1>
+      <p>BPS Kabupaten Kepulauan Anambas</p>
+    </div>
+    <p class="role-label">Siapa Anda?</p>
+    <div class="role-card pegawai" onclick="pilihRole('pegawai')">
+      <div class="role-icon blue"><i class="ti ti-id-badge-2"></i></div>
+      <div class="role-info">
+        <h3>Pegawai BPS</h3>
+        <p>Laporan RTL Triwulanan dan Bukti Dukung Capaian Kinerja</p>
+      </div>
+      <i class="ti ti-chevron-right role-arrow"></i>
+    </div>
+    <div class="role-card mitra" onclick="pilihRole('mitra')">
+      <div class="role-icon green"><i class="ti ti-users"></i></div>
+      <div class="role-info">
+        <h3>Mitra BPS</h3>
+        <p>Laporan Kegiatan Lapangan beserta dokumen pencairan honor</p>
+      </div>
+      <i class="ti ti-chevron-right role-arrow"></i>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCREEN 1: MENU PEGAWAI ========== -->
+<div id="screen-menu-pegawai" class="screen">
+  <div class="container">
+    <div class="topbar">
+      <button class="topbar-back" onclick="kembaliHome()"><i class="ti ti-arrow-left"></i> Beranda</button>
+    </div>
+    <span class="user-badge pegawai"><i class="ti ti-id-badge-2"></i> Pegawai BPS</span>
+    <div class="menu-title">Pilih Jenis Laporan</div>
+    <div class="menu-subtitle">Pilih jenis laporan yang ingin Anda buat</div>
+
+    <div class="laporan-card" onclick="bukaForm('rtl')">
+      <div class="laporan-card-header">
+        <div class="laporan-icon blue"><i class="ti ti-clipboard-list"></i></div>
+        <div>
+          <h3>Laporan RTL</h3>
+          <p>Rencana Tindak Lanjut triwulanan — berisi pendahuluan, analisis kendala, rekapitulasi RTL, dokumentasi, dan daftar output kegiatan.</p>
+        </div>
+      </div>
+      <div class="laporan-card-footer">
+        <div class="laporan-tags">
+          <span class="tag blue">Per Triwulan</span>
+          <span class="tag">Kendala & Solusi</span>
+          <span class="tag">Maks. 6 Foto</span>
+        </div>
+        <div class="laporan-cta">Buat <i class="ti ti-arrow-right"></i></div>
+      </div>
+    </div>
+
+    <div class="laporan-card" onclick="bukaForm('buktidukung')">
+      <div class="laporan-card-header">
+        <div class="laporan-icon purple"><i class="ti ti-shield-check"></i></div>
+        <div>
+          <h3>Bukti Dukung Capaian Kinerja</h3>
+          <p>Dokumentasi bukti fisik pelaksanaan kegiatan — berisi uraian kegiatan, rekapitulasi capaian target vs realisasi, foto, dan daftar output.</p>
+        </div>
+      </div>
+      <div class="laporan-card-footer">
+        <div class="laporan-tags">
+          <span class="tag purple">Capaian Kinerja</span>
+          <span class="tag">Target vs Realisasi</span>
+          <span class="tag">Maks. 2 Foto</span>
+        </div>
+        <div class="laporan-cta" style="color:#7c3aed">Buat <i class="ti ti-arrow-right"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCREEN 2: MENU MITRA ========== -->
+<div id="screen-menu-mitra" class="screen">
+  <div class="container">
+    <div class="topbar">
+      <button class="topbar-back" onclick="kembaliHome()"><i class="ti ti-arrow-left"></i> Beranda</button>
+    </div>
+    <span class="user-badge mitra"><i class="ti ti-users"></i> Mitra BPS</span>
+    <div class="menu-title">Laporan Kegiatan Mitra</div>
+    <div class="menu-subtitle">Buat laporan kegiatan lapangan beserta dokumen pencairan honor</div>
+
+    <div class="laporan-card" onclick="bukaForm('mitra')">
+      <div class="laporan-card-header">
+        <div class="laporan-icon green"><i class="ti ti-map-2"></i></div>
+        <div>
+          <h3>Laporan Kegiatan Lapangan</h3>
+          <p>Form sederhana berisi identitas mitra, tanggal pencacahan, wilayah tugas, laporan singkat kegiatan, dokumentasi foto, serta lampiran kuitansi, SPPD, dan kartu kendali.</p>
+        </div>
+      </div>
+      <div class="laporan-card-footer">
+        <div class="laporan-tags">
+          <span class="tag green">Mitra / PML</span>
+          <span class="tag">Maks. 2 Foto</span>
+          <span class="tag">Kuitansi & SPPD</span>
+        </div>
+        <div class="laporan-cta" style="color:#059669">Buat <i class="ti ti-arrow-right"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FORM RTL ========== -->
+<div id="screen-rtl" class="screen">
+  <div class="container">
+    <div class="topbar">
+      <button class="topbar-back" onclick="kembaliMenu('pegawai')"><i class="ti ti-arrow-left"></i> Kembali</button>
+      <span class="topbar-title">Laporan RTL</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="rtl-progress" style="width:20%"></div></div>
+    <div class="step-nav">
+      <button class="step-btn active" onclick="rtlGoStep(1)" id="rtlnav1">Info</button>
+      <button class="step-btn" onclick="rtlGoStep(2)" id="rtlnav2">Progres</button>
+      <button class="step-btn" onclick="rtlGoStep(3)" id="rtlnav3">Foto</button>
+      <button class="step-btn" onclick="rtlGoStep(4)" id="rtlnav4">Output</button>
+      <button class="step-btn" onclick="rtlGoStep(5)" id="rtlnav5">Unduh</button>
+    </div>
+    <div id="rtlstep1">
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-building"></i> Informasi Kegiatan</div>
+        <div class="field-group"><label class="field-label">Nama Kegiatan <span class="req">*</span></label><input type="text" id="rtl_namaKegiatan" placeholder="Contoh: Survei Sosial Ekonomi Nasional 2026"></div>
+        <div class="row-2">
+          <div class="field-group"><label class="field-label">Triwulan <span class="req">*</span></label><select id="rtl_triwulan"><option value="">— Pilih —</option><option>I</option><option>II</option><option>III</option><option>IV</option></select></div>
+          <div class="field-group"><label class="field-label">Tahun <span class="req">*</span></label><input type="number" id="rtl_tahun" value="2026" min="2020" max="2035"></div>
+        </div>
+        <div class="row-2">
+          <div class="field-group"><label class="field-label">Tim <span class="req">*</span></label><select id="rtl_tim"><option value="">— Pilih Tim —</option><option>Tim Sosial</option><option>Tim Produksi</option><option>Tim Distribusi</option><option>Tim Neraca</option><option>Tim IPDS</option></select></div>
+          <div class="field-group"><label class="field-label">Bulan Laporan <span class="req">*</span></label><select id="rtl_bulan"><option value="">— Pilih —</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-user-check"></i> Penanggung Jawab</div>
+        <div class="row-2">
+          <div class="field-group"><label class="field-label">Nama Ketua Tim <span class="req">*</span></label><input type="text" id="rtl_namaKetua" placeholder="Nama lengkap"></div>
+          <div class="field-group"><label class="field-label">NIP <span class="req">*</span></label><input type="text" id="rtl_nipKetua" placeholder="19XXXXXXXXXXXXXX"></div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-file-text"></i> Bab I — Pendahuluan</div>
+        <div class="field-group"><label class="field-label">Latar Belakang <span class="req">*</span></label><textarea id="rtl_latarBelakang" rows="4" placeholder="Uraikan latar belakang kegiatan ini..."></textarea></div>
+        <div class="field-group"><label class="field-label">Sasaran Kegiatan <span class="req">*</span></label><textarea id="rtl_sasaran" rows="3" placeholder="Sasaran yang ingin dicapai..."></textarea></div>
+        <div class="field-group"><label class="field-label">Tujuan Kegiatan <span class="req">*</span></label><div id="rtl_tujuanList"></div><button class="btn-add" onclick="rtlAddTujuan()"><i class="ti ti-plus"></i> Tambah Tujuan</button></div>
+      </div>
+      <div class="nav-btns"><button class="btn-next" onclick="rtlGoStep(2)">Selanjutnya: Progres <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="rtlstep2" style="display:none">
+      <div class="section-card"><div class="section-title"><i class="ti ti-alert-triangle"></i> 2.1 Kendala &amp; Solusi</div><div id="rtl_kendalaList"></div><button class="btn-add" onclick="rtlAddKendala()"><i class="ti ti-plus"></i> Tambah Kendala</button></div>
+      <div class="section-card"><div class="section-title"><i class="ti ti-list-check"></i> 2.2 Rekapitulasi RTL</div><div id="rtl_rtlList"></div><button class="btn-add" onclick="rtlAddRTL()"><i class="ti ti-plus"></i> Tambah RTL</button></div>
+      <div class="nav-btns"><button class="btn-prev" onclick="rtlGoStep(1)"><i class="ti ti-arrow-left"></i> Kembali</button><button class="btn-next" onclick="rtlGoStep(3)">Selanjutnya: Foto <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="rtlstep3" style="display:none">
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-camera"></i> Bab III — Dokumentasi</div>
+        <div class="info-note"><i class="ti ti-info-circle"></i><span>Upload maksimal 6 foto. Sertakan keterangan waktu, lokasi, dan aktivitas pada setiap foto.</span></div>
+        <div class="upload-area" onclick="document.getElementById('rtlPhotoInput').click()" id="rtlPhotoArea"><input type="file" id="rtlPhotoInput" accept="image/*" multiple onchange="rtlHandlePhotos(event)"><i class="ti ti-photo-up" style="font-size:28px;color:#94a3b8"></i><p>Klik untuk pilih foto</p><p class="hint">Maks. 6 foto · JPG, PNG</p></div>
+        <div class="photo-grid" id="rtlPhotoPreview"></div>
+      </div>
+      <div class="nav-btns"><button class="btn-prev" onclick="rtlGoStep(2)"><i class="ti ti-arrow-left"></i> Kembali</button><button class="btn-next" onclick="rtlGoStep(4)">Selanjutnya: Output <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="rtlstep4" style="display:none">
+      <div class="section-card"><div class="section-title"><i class="ti ti-package"></i> 4.1 Output Kegiatan</div><div id="rtl_outputList"></div><button class="btn-add" onclick="rtlAddOutput()"><i class="ti ti-plus"></i> Tambah Output</button></div>
+      <div class="section-card"><div class="section-title"><i class="ti ti-notes"></i> 4.2 Catatan Penutup</div><textarea id="rtl_catatan" rows="3" placeholder="Catatan penutup singkat..."></textarea></div>
+      <div class="nav-btns"><button class="btn-prev" onclick="rtlGoStep(3)"><i class="ti ti-arrow-left"></i> Kembali</button><button class="btn-next" onclick="rtlGoStep(5)">Pratinjau &amp; Unduh <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="rtlstep5" style="display:none">
+      <div class="section-card"><div class="section-title"><i class="ti ti-eye"></i> Ringkasan</div><div id="rtl_summary"></div></div>
+      <div class="success-card"><div class="success-title"><i class="ti ti-download"></i> Unduh PDF</div><p style="font-size:13px;color:#64748b;margin-bottom:1rem">Laporan RTL siap diunduh dalam format PDF.</p><button class="btn-pdf" onclick="rtlGeneratePDF()"><i class="ti ti-file-type-pdf" style="font-size:18px"></i> Unduh Laporan RTL (PDF)</button></div>
+      <div class="nav-btns"><button class="btn-prev" onclick="rtlGoStep(4)"><i class="ti ti-arrow-left"></i> Kembali Edit</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FORM BUKTI DUKUNG ========== -->
+<div id="screen-buktidukung" class="screen">
+  <div class="container">
+    <div class="topbar">
+      <button class="topbar-back" onclick="kembaliMenu('pegawai')"><i class="ti ti-arrow-left"></i> Kembali</button>
+      <span class="topbar-title">Bukti Dukung Capaian Kinerja</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="bd-progress" style="width:20%"></div></div>
+    <div class="step-nav">
+      <button class="step-btn active" onclick="bdGoStep(1)" id="bdnav1">Info</button>
+      <button class="step-btn" onclick="bdGoStep(2)" id="bdnav2">Capaian</button>
+      <button class="step-btn" onclick="bdGoStep(3)" id="bdnav3">Foto</button>
+      <button class="step-btn" onclick="bdGoStep(4)" id="bdnav4">Output</button>
+      <button class="step-btn" onclick="bdGoStep(5)" id="bdnav5">Unduh</button>
+    </div>
+    <div id="bdstep1">
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-clipboard-text"></i> Informasi Kegiatan</div>
+        <div class="field-group"><label class="field-label">Nama Kegiatan <span class="req">*</span></label><input type="text" id="bd_namaKegiatan" placeholder="Contoh: Rapat Koordinasi Tim Sosial Triwulan I"></div>
+        <div class="row-2"><div class="field-group"><label class="field-label">Tanggal Pelaksanaan <span class="req">*</span></label><input type="date" id="bd_tglMulai"></div><div class="field-group"><label class="field-label">Tanggal Selesai <span class="req">*</span></label><input type="date" id="bd_tglSelesai"></div></div>
+        <div class="row-2">
+          <div class="field-group"><label class="field-label">Lokasi <span class="req">*</span></label><input type="text" id="bd_lokasi" placeholder="Tempat pelaksanaan kegiatan"></div>
+          <div class="field-group"><label class="field-label">Tim <span class="req">*</span></label><select id="bd_tim"><option value="">— Pilih —</option><option>Tim Sosial</option><option>Tim Produksi</option><option>Tim Distribusi</option><option>Tim Neraca</option><option>Tim IPDS</option></select></div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-user-check"></i> Identitas Pegawai</div>
+        <div class="row-2"><div class="field-group"><label class="field-label">Nama Pegawai <span class="req">*</span></label><input type="text" id="bd_namaPegawai" placeholder="Nama lengkap"></div><div class="field-group"><label class="field-label">NIP <span class="req">*</span></label><input type="text" id="bd_nip" placeholder="19XXXXXXXXXXXXXX"></div></div>
+        <div class="row-2"><div class="field-group"><label class="field-label">Jabatan <span class="req">*</span></label><input type="text" id="bd_jabatan" placeholder="Jabatan fungsional"></div><div class="field-group"><label class="field-label">Indikator Kinerja</label><input type="text" id="bd_indikator" placeholder="IKK terkait (opsional)"></div></div>
+      </div>
+      <div class="section-card"><div class="section-title"><i class="ti ti-file-text"></i> Uraian Kegiatan</div><textarea id="bd_uraian" rows="4" placeholder="Jelaskan singkat kegiatan: tujuan, peserta, dan proses pelaksanaannya..."></textarea></div>
+      <div class="nav-btns"><button class="btn-next" onclick="bdGoStep(2)">Selanjutnya: Capaian <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="bdstep2" style="display:none">
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-trending-up"></i> Hasil dan Capaian</div>
+        <div class="field-group"><label class="field-label">Hasil yang Dicapai <span class="req">*</span></label><textarea id="bd_hasil" rows="4" placeholder="Uraikan hasil konkret: apa yang dihasilkan, berapa target yang tercapai..."></textarea></div>
+        <div class="field-group"><label class="field-label">Kendala dan Solusi</label><textarea id="bd_kendala" rows="3" placeholder="Kendala dan solusinya. Ketik 'Tidak ada kendala' jika tidak ada..."></textarea></div>
+        <div class="field-group"><label class="field-label">Rencana Tindak Lanjut</label><textarea id="bd_rtl" rows="3" placeholder="RTL untuk periode berikutnya..."></textarea></div>
+      </div>
+      <div class="section-card"><div class="section-title"><i class="ti ti-chart-bar"></i> Rekapitulasi Capaian <span style="font-size:11px;font-weight:400;color:#94a3b8">(opsional)</span></div><div id="bd_capList"></div><button class="btn-add" onclick="bdAddCapaian()"><i class="ti ti-plus"></i> Tambah Baris Rekapitulasi</button></div>
+      <div class="nav-btns"><button class="btn-prev" onclick="bdGoStep(1)"><i class="ti ti-arrow-left"></i> Kembali</button><button class="btn-next" onclick="bdGoStep(3)">Selanjutnya: Foto <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="bdstep3" style="display:none">
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-camera"></i> Dokumentasi Foto</div>
+        <div class="info-note"><i class="ti ti-info-circle"></i><span>Upload maksimal 2 foto sebagai bukti visual pelaksanaan kegiatan.</span></div>
+        <div class="upload-area" onclick="document.getElementById('bdPhotoInput').click()" id="bdPhotoArea"><input type="file" id="bdPhotoInput" accept="image/*" multiple onchange="bdHandlePhotos(event)"><i class="ti ti-photo-up" style="font-size:28px;color:#94a3b8"></i><p>Klik untuk pilih foto</p><p class="hint">Maks. 2 foto · JPG, PNG</p></div>
+        <div class="photo-grid" id="bdPhotoPreview"></div>
+      </div>
+      <div class="nav-btns"><button class="btn-prev" onclick="bdGoStep(2)"><i class="ti ti-arrow-left"></i> Kembali</button><button class="btn-next" onclick="bdGoStep(4)">Selanjutnya: Output <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="bdstep4" style="display:none">
+      <div class="section-card"><div class="section-title"><i class="ti ti-package"></i> Output Kegiatan</div><div id="bd_outputList"></div><button class="btn-add" onclick="bdAddOutput()"><i class="ti ti-plus"></i> Tambah Output</button></div>
+      <div class="section-card"><div class="section-title"><i class="ti ti-writing"></i> Pernyataan Penutup</div><textarea id="bd_catatan" rows="3" placeholder="Pernyataan atau catatan penutup..."></textarea></div>
+      <div class="nav-btns"><button class="btn-prev" onclick="bdGoStep(3)"><i class="ti ti-arrow-left"></i> Kembali</button><button class="btn-next" onclick="bdGoStep(5)">Pratinjau &amp; Unduh <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="bdstep5" style="display:none">
+      <div class="section-card"><div class="section-title"><i class="ti ti-eye"></i> Ringkasan</div><div id="bd_summary"></div></div>
+      <div class="success-card"><div class="success-title"><i class="ti ti-download"></i> Unduh PDF</div><p style="font-size:13px;color:#64748b;margin-bottom:1rem">Laporan Bukti Dukung siap diunduh dalam format PDF.</p><button class="btn-pdf" onclick="bdGeneratePDF()"><i class="ti ti-file-type-pdf" style="font-size:18px"></i> Unduh Bukti Dukung (PDF)</button></div>
+      <div class="nav-btns"><button class="btn-prev" onclick="bdGoStep(4)"><i class="ti ti-arrow-left"></i> Kembali Edit</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FORM MITRA ========== -->
+<div id="screen-mitra" class="screen">
+  <div class="container">
+    <div class="topbar">
+      <button class="topbar-back" onclick="kembaliMenu('mitra')"><i class="ti ti-arrow-left"></i> Kembali</button>
+      <span class="topbar-title">Laporan Kegiatan Mitra</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="mt-progress" style="width:25%"></div></div>
+    <div class="step-nav">
+      <button class="step-btn active" onclick="mtGoStep(1)" id="mtnav1">Identitas</button>
+      <button class="step-btn" onclick="mtGoStep(2)" id="mtnav2">Dokumentasi</button>
+      <button class="step-btn" onclick="mtGoStep(3)" id="mtnav3">Lampiran</button>
+      <button class="step-btn" onclick="mtGoStep(4)" id="mtnav4">Unduh</button>
+    </div>
+    <div id="mtstep1">
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-clipboard-text"></i> Informasi Kegiatan</div>
+        <div class="field-group"><label class="field-label">Nama Kegiatan <span class="req">*</span></label><input type="text" id="mt_namaKegiatan" placeholder="Contoh: Pencacahan Survei Pertanian 2026"></div>
+        <div class="row-2"><div class="field-group"><label class="field-label">Tanggal Mulai <span class="req">*</span></label><input type="date" id="mt_tglMulai"></div><div class="field-group"><label class="field-label">Tanggal Selesai <span class="req">*</span></label><input type="date" id="mt_tglSelesai"></div></div>
+        <div class="field-group"><label class="field-label">Wilayah Tugas <span class="req">*</span></label><input type="text" id="mt_wilayah" placeholder="Desa, Kecamatan"></div>
+      </div>
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-user"></i> Identitas Mitra</div>
+        <div class="row-2"><div class="field-group"><label class="field-label">Nama Lengkap <span class="req">*</span></label><input type="text" id="mt_namaMitra" placeholder="Nama sesuai KTP"></div><div class="field-group"><label class="field-label">Jabatan <span class="req">*</span></label><select id="mt_jabatan"><option value="">— Pilih —</option><option>Pencacah (PML)</option><option>Koordinator Lapangan</option><option>Enumerator</option><option>Lainnya</option></select></div></div>
+        <div class="row-2"><div class="field-group"><label class="field-label">Nomor HP</label><input type="text" id="mt_noHp" placeholder="08XXXXXXXXXX"></div><div class="field-group"><label class="field-label">Pengawas / Organik</label><input type="text" id="mt_pengawas" placeholder="Nama pegawai BPS pengawas"></div></div>
+      </div>
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-notes"></i> Laporan Singkat</div>
+        <div class="field-group"><label class="field-label">Hasil Pencacahan <span class="req">*</span></label><textarea id="mt_hasil" rows="3" placeholder="Berapa responden, kondisi lapangan, dll..."></textarea></div>
+        <div class="field-group"><label class="field-label">Kendala</label><textarea id="mt_kendala" rows="2" placeholder="Kendala di lapangan, atau 'Tidak ada kendala'..."></textarea></div>
+      </div>
+      <div class="nav-btns"><button class="btn-next" onclick="mtGoStep(2)" style="background:#059669">Selanjutnya: Foto <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="mtstep2" style="display:none">
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-camera"></i> Dokumentasi Foto</div>
+        <div class="info-note"><i class="ti ti-info-circle"></i><span>Upload maksimal 2 foto kegiatan pencacahan di lapangan.</span></div>
+        <div class="upload-area" onclick="document.getElementById('mtPhotoInput').click()" id="mtPhotoArea"><input type="file" id="mtPhotoInput" accept="image/*" multiple onchange="mtHandlePhotos(event)"><i class="ti ti-photo-up" style="font-size:28px;color:#94a3b8"></i><p>Klik untuk pilih foto</p><p class="hint">Maks. 2 foto · JPG, PNG</p></div>
+        <div class="photo-grid" id="mtPhotoPreview"></div>
+      </div>
+      <div class="nav-btns"><button class="btn-prev" onclick="mtGoStep(1)"><i class="ti ti-arrow-left"></i> Kembali</button><button class="btn-next" onclick="mtGoStep(3)" style="background:#059669">Selanjutnya: Lampiran <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="mtstep3" style="display:none">
+      <div class="section-card">
+        <div class="section-title"><i class="ti ti-paperclip"></i> Dokumen Pencairan Honor</div>
+        <div class="info-note"><i class="ti ti-info-circle"></i><span>Upload foto atau scan dokumen. Semua akan digabung ke dalam satu PDF bersama laporan.</span></div>
+        <div style="margin-bottom:1rem"><label class="field-label"><i class="ti ti-receipt" style="vertical-align:-2px"></i> Kuitansi</label><div class="upload-area" onclick="document.getElementById('mtKuitansiInput').click()"><input type="file" id="mtKuitansiInput" accept="image/*,.pdf" onchange="mtHandleDoc(event,'kuitansi')"><i class="ti ti-upload" style="font-size:22px;color:#94a3b8"></i><p>Upload kuitansi</p><p class="hint">JPG, PNG, PDF</p></div><div id="mtKuitansiPreview"></div></div>
+        <div style="margin-bottom:1rem"><label class="field-label"><i class="ti ti-map-pin" style="vertical-align:-2px"></i> SPPD</label><div class="upload-area" onclick="document.getElementById('mtSppdInput').click()"><input type="file" id="mtSppdInput" accept="image/*,.pdf" onchange="mtHandleDoc(event,'sppd')"><i class="ti ti-upload" style="font-size:22px;color:#94a3b8"></i><p>Upload SPPD</p><p class="hint">JPG, PNG, PDF</p></div><div id="mtSppdPreview"></div></div>
+        <div><label class="field-label"><i class="ti ti-clipboard-check" style="vertical-align:-2px"></i> Kartu Kendali</label><div class="upload-area" onclick="document.getElementById('mtKartuInput').click()"><input type="file" id="mtKartuInput" accept="image/*,.pdf" onchange="mtHandleDoc(event,'kartu')"><i class="ti ti-upload" style="font-size:22px;color:#94a3b8"></i><p>Upload kartu kendali</p><p class="hint">JPG, PNG, PDF</p></div><div id="mtKartuPreview"></div></div>
+      </div>
+      <div class="nav-btns"><button class="btn-prev" onclick="mtGoStep(2)"><i class="ti ti-arrow-left"></i> Kembali</button><button class="btn-next" onclick="mtGoStep(4)" style="background:#059669">Pratinjau &amp; Unduh <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+    <div id="mtstep4" style="display:none">
+      <div class="section-card"><div class="section-title"><i class="ti ti-eye"></i> Ringkasan</div><div id="mt_summary"></div></div>
+      <div class="success-card" style="border-color:#bbf7d0"><div class="success-title"><i class="ti ti-download"></i> Unduh PDF</div><p style="font-size:13px;color:#64748b;margin-bottom:1rem">Laporan dan semua lampiran digabung menjadi satu file PDF.</p><button class="btn-pdf" onclick="mtGeneratePDF()"><i class="ti ti-file-type-pdf" style="font-size:18px"></i> Unduh Laporan Mitra (PDF)</button></div>
+      <div class="nav-btns"><button class="btn-prev" onclick="mtGoStep(3)"><i class="ti ti-arrow-left"></i> Kembali Edit</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ===== NAVIGASI ANTAR LAYAR =====
+let currentRole = '';
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function pilihRole(role) {
+  currentRole = role;
+  showScreen(role === 'pegawai' ? 'screen-menu-pegawai' : 'screen-menu-mitra');
+}
+
+function bukaForm(jenis) {
+  // Reset step ke 1 setiap kali form dibuka
+  if (jenis === 'rtl') { rtlCurrentStep = 1; rtlGoStep(1, true); showScreen('screen-rtl'); }
+  else if (jenis === 'buktidukung') { bdCurrentStep = 1; bdGoStep(1, true); showScreen('screen-buktidukung'); }
+  else if (jenis === 'mitra') { mtCurrentStep = 1; mtGoStep(1, true); showScreen('screen-mitra'); }
+}
+
+function kembaliHome() { showScreen('screen-home'); }
+function kembaliMenu(role) { showScreen(role === 'pegawai' ? 'screen-menu-pegawai' : 'screen-menu-mitra'); }
+
+// ===== HELPERS =====
+const MONTHS_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+function fmtDate(d) { if (!d) return '—'; const [y,m,dd] = d.split('-'); return `${parseInt(dd)} ${MONTHS_ID[parseInt(m)-1]} ${y}`; }
+function todayStr() { const t = new Date(); return `Tarempa, ${t.getDate()} ${MONTHS_ID[t.getMonth()]} ${t.getFullYear()}`; }
+function renumber(listId, label) { Array.from(document.getElementById(listId).children).forEach((el,i) => { el.querySelector('.table-entry-num').textContent = label + ' ' + (i+1); }); }
+
+function makePhotoHandlers(photos, areaId, previewId, max) {
+  return {
+    handle(e) {
+      Array.from(e.target.files).slice(0, max - photos.length).forEach(f => {
+        const r = new FileReader(); r.onload = ev => { photos.push({ src: ev.target.result, caption: '' }); renderPhotos(); }; r.readAsDataURL(f);
+      });
+    },
+    render() { renderPhotoList(photos, previewId, areaId, max, this.handle.bind(this)); }
+  };
+  function renderPhotos() { renderPhotoList(photos, previewId, areaId, max); }
+}
+
+function renderPhotoList(photos, previewId, areaId, max) {
+  const preview = document.getElementById(previewId);
+  preview.innerHTML = '';
+  photos.forEach((p, i) => {
+    const div = document.createElement('div'); div.className = 'photo-item';
+    div.innerHTML = `<div class="photo-item-header"><span>Foto ${i+1}</span><button class="btn-rm-photo" onclick="removePhotoFrom(${JSON.stringify(previewId)},${JSON.stringify(areaId)},${i})"><i class="ti ti-trash"></i></button></div><img src="${p.src}" alt="Foto ${i+1}"><div class="photo-item-body"><input type="text" placeholder="Keterangan foto..." value="${p.caption}" oninput="updatePhotoCaption(${JSON.stringify(previewId)},${i},this.value)"></div>`;
+    preview.appendChild(div);
+  });
+  const area = document.getElementById(areaId);
+  if (area) { area.style.opacity = photos.length >= max ? '0.4' : '1'; area.style.pointerEvents = photos.length >= max ? 'none' : 'auto'; }
+}
+
+// Photo registries
+const photoRegistries = {};
+function registerPhotos(key, max) { if (!photoRegistries[key]) photoRegistries[key] = []; return photoRegistries[key]; }
+function addPhotosTo(key, files, areaId, previewId, max) {
+  const arr = photoRegistries[key];
+  Array.from(files).slice(0, max - arr.length).forEach(f => { const r = new FileReader(); r.onload = ev => { arr.push({ src: ev.target.result, caption: '' }); renderPhotoList(arr, previewId, areaId, max); }; r.readAsDataURL(f); });
+}
+function removePhotoFrom(previewId, areaId, i) {
+  const key = previewId === 'rtlPhotoPreview' ? 'rtl' : previewId === 'bdPhotoPreview' ? 'bd' : 'mt';
+  const max = key === 'rtl' ? 6 : 2;
+  photoRegistries[key].splice(i, 1);
+  renderPhotoList(photoRegistries[key], previewId, areaId, max);
+}
+function updatePhotoCaption(previewId, i, val) {
+  const key = previewId === 'rtlPhotoPreview' ? 'rtl' : previewId === 'bdPhotoPreview' ? 'bd' : 'mt';
+  if (photoRegistries[key]) photoRegistries[key][i].caption = val;
+}
+
+// Init photo registries
+registerPhotos('rtl', 6); registerPhotos('bd', 2); registerPhotos('mt', 2);
+
+function rtlHandlePhotos(e) { addPhotosTo('rtl', e.target.files, 'rtlPhotoArea', 'rtlPhotoPreview', 6); }
+function bdHandlePhotos(e) { addPhotosTo('bd', e.target.files, 'bdPhotoArea', 'bdPhotoPreview', 2); }
+function mtHandlePhotos(e) { addPhotosTo('mt', e.target.files, 'mtPhotoArea', 'mtPhotoPreview', 2); }
+
+// Doc uploads (mitra)
+const mtDocs = { kuitansi: null, sppd: null, kartu: null };
+function mtHandleDoc(e, type) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = ev => { mtDocs[type] = { name: f.name, size: f.size, data: ev.target.result, type: f.type }; mtRenderDoc(type); }; r.readAsDataURL(f);
+}
+function mtRenderDoc(type) {
+  const labels = { kuitansi: 'Kuitansi', sppd: 'SPPD', kartu: 'Kartu Kendali' };
+  const d = mtDocs[type];
+  const el = document.getElementById(`mt${type.charAt(0).toUpperCase()+type.slice(1)}Preview`);
+  el.innerHTML = d ? `<div class="doc-item"><i class="ti ti-file doc-icon"></i><div style="flex:1;overflow:hidden"><div class="doc-name">${d.name}</div><div class="doc-size">${(d.size/1024).toFixed(0)} KB</div></div><span class="doc-badge">${labels[type]}</span><button class="btn-rm-doc" onclick="mtDocs['${type}']=null;mtRenderDoc('${type}')"><i class="ti ti-x"></i></button></div>` : '';
+}
+
+// ===== RTL FORM =====
+let rtlCurrentStep = 1;
+function rtlGoStep(n, silent) {
+  if (!silent) { document.getElementById('rtlstep'+rtlCurrentStep).style.display='none'; document.getElementById('rtlnav'+rtlCurrentStep).classList.remove('active'); }
+  else { for(let i=1;i<=5;i++){document.getElementById('rtlstep'+i).style.display='none'; document.getElementById('rtlnav'+i).classList.remove('active');} }
+  rtlCurrentStep=n;
+  document.getElementById('rtlstep'+n).style.display='block';
+  document.getElementById('rtlnav'+n).classList.add('active');
+  document.getElementById('rtl-progress').style.width=(n/5*100)+'%';
+  if(n===5)rtlBuildSummary();
+  window.scrollTo(0,0);
+}
+function rtlAddTujuan(){const l=document.getElementById('rtl_tujuanList');const i=l.children.length+1;const d=document.createElement('div');d.className='table-entry';d.innerHTML=`<div class="table-entry-num">Tujuan ${i}</div><textarea class="rtl-tujuan" rows="2" style="width:100%" placeholder="Tujuan ke-${i}..."></textarea><button class="btn-remove" onclick="this.parentElement.remove();renumber('rtl_tujuanList','Tujuan')">×</button>`;l.appendChild(d);}
+function rtlAddKendala(){const l=document.getElementById('rtl_kendalaList');const i=l.children.length+1;const d=document.createElement('div');d.className='table-entry';d.innerHTML=`<div class="table-entry-num">Baris ${i}</div><div class="field-group"><label class="field-label">Kendala</label><textarea class="rtl-kendala" rows="2" style="width:100%" placeholder="Uraikan kendala..."></textarea></div><div class="field-group"><label class="field-label">Solusi</label><textarea class="rtl-solusi" rows="2" style="width:100%" placeholder="Solusi yang diterapkan..."></textarea></div><div class="field-group" style="margin:0"><label class="field-label">RTL Selanjutnya</label><textarea class="rtl-rtlsel" rows="2" style="width:100%" placeholder="Rencana tindak lanjut..."></textarea></div><button class="btn-remove" onclick="this.parentElement.remove();renumber('rtl_kendalaList','Baris')">×</button>`;l.appendChild(d);}
+function rtlAddRTL(){const l=document.getElementById('rtl_rtlList');const i=l.children.length+1;const d=document.createElement('div');d.className='table-entry';d.innerHTML=`<div class="table-entry-num">Baris ${i}</div><div class="row-2"><div class="field-group"><label class="field-label">RTL Direncanakan</label><textarea class="rtl-rencana" rows="2" style="width:100%"></textarea></div><div class="field-group"><label class="field-label">Hasil Pelaksanaan</label><textarea class="rtl-hasil" rows="2" style="width:100%"></textarea></div></div><div class="row-2"><div class="field-group"><label class="field-label">Status</label><select class="rtl-status" style="width:100%"><option>Selesai</option><option>Dalam Proses</option><option>Belum Dilaksanakan</option></select></div><div class="field-group"><label class="field-label">Keterangan</label><input type="text" class="rtl-ket" style="width:100%"></div></div><button class="btn-remove" onclick="this.parentElement.remove();renumber('rtl_rtlList','Baris')">×</button>`;l.appendChild(d);}
+function rtlAddOutput(){const l=document.getElementById('rtl_outputList');const i=l.children.length+1;const d=document.createElement('div');d.className='table-entry';d.innerHTML=`<div class="table-entry-num">Output ${i}</div><div class="row-3"><div class="field-group"><label class="field-label">Nama Output</label><input type="text" class="out-nama" style="width:100%"></div><div class="field-group"><label class="field-label">Bentuk</label><select class="out-bentuk" style="width:100%"><option>Excel</option><option>PDF</option><option>Word</option><option>Foto</option><option>Notulensi</option><option>Lainnya</option></select></div><div class="field-group"><label class="field-label">Keterangan</label><input type="text" class="out-ket" style="width:100%"></div></div><button class="btn-remove" onclick="this.parentElement.remove();renumber('rtl_outputList','Output')">×</button>`;l.appendChild(d);}
+function rtlBuildSummary(){const n=v('rtl_namaKegiatan'),tw=v('rtl_triwulan'),th=v('rtl_tahun'),ti=v('rtl_tim'),ke=v('rtl_namaKetua');document.getElementById('rtl_summary').innerHTML=`<div class="row-2" style="gap:10px;margin-bottom:10px"><div class="summary-box"><div class="summary-label">Kegiatan</div><div class="summary-value">${n||'—'}</div></div><div class="summary-box"><div class="summary-label">Triwulan / Tahun</div><div class="summary-value">TW ${tw||'—'} / ${th||'—'}</div></div></div><div class="row-2" style="gap:10px;margin-bottom:10px"><div class="summary-box"><div class="summary-label">Tim</div><div class="summary-value">${ti||'—'}</div></div><div class="summary-box"><div class="summary-label">Ketua Tim</div><div class="summary-value">${ke||'—'}</div></div></div><div class="stat-grid"><div class="stat-box"><div class="stat-num">${document.getElementById('rtl_kendalaList').children.length}</div><div class="stat-lbl">Kendala</div></div><div class="stat-box"><div class="stat-num">${photoRegistries['rtl'].length}</div><div class="stat-lbl">Foto</div></div><div class="stat-box"><div class="stat-num">${document.getElementById('rtl_outputList').children.length}</div><div class="stat-lbl">Output</div></div></div>`;}
+
+// ===== BD FORM =====
+let bdCurrentStep = 1;
+function bdGoStep(n,silent){if(!silent){document.getElementById('bdstep'+bdCurrentStep).style.display='none';document.getElementById('bdnav'+bdCurrentStep).classList.remove('active');}else{for(let i=1;i<=5;i++){document.getElementById('bdstep'+i).style.display='none';document.getElementById('bdnav'+i).classList.remove('active');}}bdCurrentStep=n;document.getElementById('bdstep'+n).style.display='block';document.getElementById('bdnav'+n).classList.add('active');document.getElementById('bd-progress').style.width=(n/5*100)+'%';if(n===5)bdBuildSummary();window.scrollTo(0,0);}
+function bdAddCapaian(){const l=document.getElementById('bd_capList');const i=l.children.length+1;const d=document.createElement('div');d.className='table-entry';d.innerHTML=`<div class="table-entry-num">Baris ${i}</div><div class="row-3"><div class="field-group"><label class="field-label">Indikator</label><input type="text" class="cap-ind" style="width:100%" placeholder="Nama indikator..."></div><div class="field-group"><label class="field-label">Target</label><input type="text" class="cap-tar" style="width:100%" placeholder="Contoh: 100 dokumen"></div><div class="field-group"><label class="field-label">Realisasi</label><input type="text" class="cap-rea" style="width:100%" placeholder="Contoh: 98 dokumen"></div></div><button class="btn-remove" onclick="this.parentElement.remove();renumber('bd_capList','Baris')">×</button>`;l.appendChild(d);}
+function bdAddOutput(){const l=document.getElementById('bd_outputList');const i=l.children.length+1;const d=document.createElement('div');d.className='table-entry';d.innerHTML=`<div class="table-entry-num">Output ${i}</div><div class="row-3"><div class="field-group"><label class="field-label">Nama Output</label><input type="text" class="out-nama" style="width:100%"></div><div class="field-group"><label class="field-label">Bentuk</label><select class="out-bentuk" style="width:100%"><option>Excel</option><option>PDF</option><option>Word</option><option>Foto</option><option>Notulensi</option><option>Lainnya</option></select></div><div class="field-group"><label class="field-label">Keterangan</label><input type="text" class="out-ket" style="width:100%"></div></div><button class="btn-remove" onclick="this.parentElement.remove();renumber('bd_outputList','Output')">×</button>`;l.appendChild(d);}
+function bdBuildSummary(){const n=v('bd_namaPegawai'),nip=v('bd_nip'),j=v('bd_jabatan'),k=v('bd_namaKegiatan'),ti=v('bd_tim');document.getElementById('bd_summary').innerHTML=`<div class="row-2" style="gap:10px;margin-bottom:10px"><div class="summary-box"><div class="summary-label">Pegawai</div><div class="summary-value">${n||'—'}</div><div style="font-size:12px;color:#94a3b8;margin-top:2px">${j||'—'}</div></div><div class="summary-box"><div class="summary-label">NIP / Tim</div><div class="summary-value">${nip||'—'}</div><div style="font-size:12px;color:#94a3b8;margin-top:2px">${ti||'—'}</div></div></div><div class="summary-box" style="margin-bottom:10px"><div class="summary-label">Kegiatan</div><div class="summary-value">${k||'—'}</div><div style="font-size:12px;color:#94a3b8;margin-top:2px">${fmtDate(v('bd_tglMulai'))} s.d. ${fmtDate(v('bd_tglSelesai'))}</div></div><div class="stat-grid"><div class="stat-box"><div class="stat-num">${document.getElementById('bd_capList').children.length}</div><div class="stat-lbl">Capaian</div></div><div class="stat-box"><div class="stat-num">${photoRegistries['bd'].length}</div><div class="stat-lbl">Foto</div></div><div class="stat-box"><div class="stat-num">${document.getElementById('bd_outputList').children.length}</div><div class="stat-lbl">Output</div></div></div>`;}
+
+// ===== MITRA FORM =====
+let mtCurrentStep = 1;
+function mtGoStep(n,silent){if(!silent){document.getElementById('mtstep'+mtCurrentStep).style.display='none';document.getElementById('mtnav'+mtCurrentStep).classList.remove('active');}else{for(let i=1;i<=4;i++){document.getElementById('mtstep'+i).style.display='none';document.getElementById('mtnav'+i).classList.remove('active');}}mtCurrentStep=n;document.getElementById('mtstep'+n).style.display='block';document.getElementById('mtnav'+n).classList.add('active');document.getElementById('mt-progress').style.width=(n/4*100)+'%';if(n===4)mtBuildSummary();window.scrollTo(0,0);}
+function mtBuildSummary(){const n=v('mt_namaMitra'),j=v('mt_jabatan'),k=v('mt_namaKegiatan'),w=v('mt_wilayah'),p=v('mt_pengawas');const lamp=['kuitansi','sppd','kartu'].filter(x=>mtDocs[x]).length;document.getElementById('mt_summary').innerHTML=`<div class="row-2" style="gap:10px;margin-bottom:10px"><div class="summary-box"><div class="summary-label">Mitra</div><div class="summary-value">${n||'—'}</div><div style="font-size:12px;color:#94a3b8;margin-top:2px">${j||'—'}</div></div><div class="summary-box"><div class="summary-label">Pengawas</div><div class="summary-value">${p||'—'}</div></div></div><div class="summary-box" style="margin-bottom:10px"><div class="summary-label">Kegiatan</div><div class="summary-value">${k||'—'}</div><div style="font-size:12px;color:#94a3b8;margin-top:2px">${w||'—'} · ${fmtDate(v('mt_tglMulai'))} s.d. ${fmtDate(v('mt_tglSelesai'))}</div></div><div class="stat-grid"><div class="stat-box"><div class="stat-num">${photoRegistries['mt'].length}</div><div class="stat-lbl">Foto</div></div><div class="stat-box"><div class="stat-num">${lamp}</div><div class="stat-lbl">Lampiran</div></div><div class="stat-box"><div class="stat-num">~${2+photoRegistries['mt'].length+lamp}</div><div class="stat-lbl">Halaman</div></div></div>`;}
+
+// Helper
+function v(id){return document.getElementById(id)?.value||'';}
+
+// ===== PDF GENERATORS =====
+function makePDFBase(){const{jsPDF}=window.jspdf;const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});const W=210,ml=25,mr=25,cw=W-ml-mr;let y=20;const ap=(n=20)=>{if(y+n>270){doc.addPage();y=20;}};const t=(txt,x,yy,o={})=>doc.text(txt||'—',x,yy,o);const hl=()=>{doc.setDrawColor(180);doc.setLineWidth(0.3);doc.line(ml,y,W-mr,y);};return{doc,W,ml,mr,cw,get y(){return y},set y(v){y=v},ap,t,hl,ml};}
+
+async function rtlGeneratePDF(){
+  const{doc,W,ml,mr,cw,ap,t,hl}=makePDFBase();let y=20;
+  const ap2=(n=20)=>{if(y+n>270){doc.addPage();y=20;}};
+  doc.setFont('helvetica','bold');doc.setFontSize(13);
+  t('LAPORAN TINDAK LANJUT',W/2,y,{align:'center'});y+=7;
+  doc.setFontSize(11);
+  doc.splitTextToSize(v('rtl_namaKegiatan').toUpperCase(),cw).forEach(l=>{t(l,W/2,y,{align:'center'});y+=6;});
+  doc.setFontSize(10);doc.setFont('helvetica','normal');
+  t(`TRIWULAN ${v('rtl_triwulan')} TAHUN ${v('rtl_tahun')}`,W/2,y,{align:'center'});y+=5;
+  t(v('rtl_tim').toUpperCase(),W/2,y,{align:'center'});y+=5;
+  t('BPS KABUPATEN KEPULAUAN ANAMBAS',W/2,y,{align:'center'});y+=5;
+  t(`${v('rtl_bulan')} ${v('rtl_tahun')}`,W/2,y,{align:'center'});y+=10;
+  doc.setDrawColor(180);doc.setLineWidth(0.3);doc.line(ml,y,W-mr,y);y+=10;
+  // BAB I
+  doc.setFont('helvetica','bold');doc.setFontSize(12);t('BAB I  PENDAHULUAN',ml,y);y+=7;
+  doc.setFontSize(11);t('1.1  Latar Belakang',ml,y);y+=6;
+  doc.setFont('helvetica','normal');doc.setFontSize(10);
+  doc.splitTextToSize(v('rtl_latarBelakang'),cw).forEach(l=>{ap2(6);t(l,ml,y);y+=5;});y+=4;
+  ap2(20);doc.setFont('helvetica','bold');doc.setFontSize(11);t('1.2  Tujuan',ml,y);y+=6;
+  doc.setFont('helvetica','normal');doc.setFontSize(10);
+  const tjs=document.querySelectorAll('.rtl-tujuan');
+  tjs.forEach((tj,i)=>{ap2(8);doc.splitTextToSize(`${i+1}. ${tj.value||'—'}`,cw-5).forEach(l=>{t(l,ml+5,y);y+=5;});});
+  if(!tjs.length){t('—',ml+5,y);y+=5;}
+  y+=4;ap2(20);doc.setFont('helvetica','bold');doc.setFontSize(11);t('1.3  Sasaran',ml,y);y+=6;
+  doc.setFont('helvetica','normal');doc.setFontSize(10);
+  doc.splitTextToSize(v('rtl_sasaran'),cw).forEach(l=>{ap2(6);t(l,ml,y);y+=5;});
+  // BAB II
+  doc.addPage();y=20;doc.setFont('helvetica','bold');doc.setFontSize(12);t('BAB II  LAPORAN PROGRES KEGIATAN',ml,y);y+=7;
+  doc.setFontSize(11);t('2.1  Kendala dan Solusi',ml,y);y+=6;
+  const ki=document.getElementById('rtl_kendalaList').children;
+  if(!ki.length){doc.setFont('helvetica','normal');doc.setFontSize(10);t('Tidak ada kendala yang dilaporkan.',ml,y);y+=8;}
+  else{
+    const cw2=[8,55,55,42];const ch=['No.','Kendala','Solusi','RTL Selanjutnya'];
+    doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setFillColor(230,240,250);doc.rect(ml,y,cw,7,'F');
+    let cx=ml+2;ch.forEach((h,i)=>{t(h,cx,y+5);cx+=cw2[i];});y+=7;
+    Array.from(ki).forEach((item,idx)=>{ap2(14);
+      const k=item.querySelector('.rtl-kendala')?.value||'—',s=item.querySelector('.rtl-solusi')?.value||'—',r=item.querySelector('.rtl-rtlsel')?.value||'—';
+      const kl=doc.splitTextToSize(k,52),sl=doc.splitTextToSize(s,52),rl=doc.splitTextToSize(r,39);
+      const rh=Math.max(kl.length,sl.length,rl.length)*5+4;
+      doc.setFont('helvetica','normal');if(idx%2===0){doc.setFillColor(248,250,252);doc.rect(ml,y,cw,rh,'F');}doc.rect(ml,y,cw,rh);
+      cx=ml+2;t(String(idx+1),cx,y+5);cx+=cw2[0];kl.forEach((l,li)=>t(l,cx,y+5+li*5));cx+=cw2[1];sl.forEach((l,li)=>t(l,cx,y+5+li*5));cx+=cw2[2];rl.forEach((l,li)=>t(l,cx,y+5+li*5));y+=rh;
+    });
+  }
+  y+=8;ap2(30);doc.setFont('helvetica','bold');doc.setFontSize(11);t('2.2  Rekapitulasi RTL',ml,y);y+=6;
+  const ri=document.getElementById('rtl_rtlList').children;
+  if(!ri.length){doc.setFont('helvetica','normal');doc.setFontSize(10);t('Tidak ada RTL.',ml,y);y+=8;}
+  else{
+    const rc=[8,48,48,25,31];const rh2=['No.','RTL Direncanakan','Hasil','Status','Ket.'];
+    doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setFillColor(230,240,250);doc.rect(ml,y,cw,7,'F');
+    let rx=ml+2;rh2.forEach((h,i)=>{t(h,rx,y+5);rx+=rc[i];});y+=7;
+    Array.from(ri).forEach((item,idx)=>{ap2(14);
+      const r1=doc.splitTextToSize(item.querySelector('.rtl-rencana')?.value||'—',45),r2=doc.splitTextToSize(item.querySelector('.rtl-hasil')?.value||'—',45),r3=doc.splitTextToSize(item.querySelector('.rtl-status')?.value||'—',22),r4=doc.splitTextToSize(item.querySelector('.rtl-ket')?.value||'—',28);
+      const mL=Math.max(r1.length,r2.length,r3.length,r4.length),rh=mL*5+4;
+      doc.setFont('helvetica','normal');if(idx%2===0){doc.setFillColor(248,250,252);doc.rect(ml,y,cw,rh,'F');}doc.rect(ml,y,cw,rh);
+      rx=ml+2;t(String(idx+1),rx,y+5);rx+=rc[0];r1.forEach((l,li)=>t(l,rx,y+5+li*5));rx+=rc[1];r2.forEach((l,li)=>t(l,rx,y+5+li*5));rx+=rc[2];r3.forEach((l,li)=>t(l,rx,y+5+li*5));rx+=rc[3];r4.forEach((l,li)=>t(l,rx,y+5+li*5));y+=rh;
+    });
+  }
+  // BAB III FOTO
+  const photos=photoRegistries['rtl'];
+  doc.addPage();y=20;doc.setFont('helvetica','bold');doc.setFontSize(12);t('BAB III  DOKUMENTASI KEGIATAN',ml,y);y+=8;
+  if(!photos.length){doc.setFont('helvetica','normal');doc.setFontSize(10);t('Tidak ada foto.',ml,y);}
+  else{const pw=(cw-5)/2,ph=pw*0.65;for(let i=0;i<photos.length;i+=2){ap2(ph+22);for(let j=0;j<2&&(i+j)<photos.length;j++){const px=ml+j*(pw+5);try{doc.addImage(photos[i+j].src,'JPEG',px,y,pw,ph);}catch{doc.rect(px,y,pw,ph);}doc.setFontSize(9);doc.splitTextToSize(`Foto ${i+j+1}: ${photos[i+j].caption||'—'}`,pw).forEach((l,li)=>t(l,px,y+ph+5+li*4));}y+=ph+18;}}
+  // BAB IV OUTPUT
+  ap2(30);doc.setFont('helvetica','bold');doc.setFontSize(12);t('BAB IV  OUTPUT KEGIATAN',ml,y);y+=7;
+  const oi=document.getElementById('rtl_outputList').children;
+  if(!oi.length){doc.setFont('helvetica','normal');doc.setFontSize(10);t('Tidak ada output.',ml,y);y+=8;}
+  else{const oc=[8,65,35,52],oh=['No.','Output','Bentuk','Keterangan'];doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setFillColor(230,240,250);doc.rect(ml,y,cw,7,'F');let ox=ml+2;oh.forEach((h,i)=>{t(h,ox,y+5);ox+=oc[i];});y+=7;Array.from(oi).forEach((item,idx)=>{ap2(10);const n1=doc.splitTextToSize(item.querySelector('.out-nama')?.value||'—',62),n2=doc.splitTextToSize(item.querySelector('.out-ket')?.value||'—',49),rh=Math.max(n1.length,n2.length)*5+4;doc.setFont('helvetica','normal');if(idx%2===0){doc.setFillColor(248,250,252);doc.rect(ml,y,cw,rh,'F');}doc.rect(ml,y,cw,rh);ox=ml+2;t(String(idx+1),ox,y+5);ox+=oc[0];n1.forEach((l,li)=>t(l,ox,y+5+li*5));ox+=oc[1];t(item.querySelector('.out-bentuk')?.value||'—',ox,y+5);ox+=oc[2];n2.forEach((l,li)=>t(l,ox,y+5+li*5));y+=rh;});}
+  y+=8;ap2(20);doc.setFont('helvetica','bold');doc.setFontSize(11);t('Catatan',ml,y);y+=6;doc.setFont('helvetica','normal');doc.setFontSize(10);doc.splitTextToSize(v('rtl_catatan')||'—',cw).forEach(l=>{ap2(6);t(l,ml,y);y+=5;});
+  // TTD
+  y+=15;ap2(40);doc.setFont('helvetica','normal');doc.setFontSize(10);t(todayStr(),W-mr,y,{align:'right'});y+=5;t(`Ketua ${v('rtl_tim')}`,W-mr,y,{align:'right'});y+=5;t('BPS Kabupaten Kepulauan Anambas',W-mr,y,{align:'right'});y+=20;doc.setFont('helvetica','bold');t(v('rtl_namaKetua')||'—',W-mr,y,{align:'right'});y+=5;doc.setFont('helvetica','normal');t(`NIP. ${v('rtl_nipKetua')||'—'}`,W-mr,y,{align:'right'});
+  doc.save(`Laporan_RTL_TW${v('rtl_triwulan')}_${v('rtl_tahun')}_${(v('rtl_namaKegiatan')||'Kegiatan').replace(/\s+/g,'_').slice(0,25)}.pdf`);
+}
+
+async function bdGeneratePDF(){
+  const{doc,W,ml,mr,cw,ap,t,hl}=makePDFBase();let y=20;
+  const ap2=(n=20)=>{if(y+n>270){doc.addPage();y=20;}};
+  doc.setFont('helvetica','bold');doc.setFontSize(13);t('BUKTI DUKUNG CAPAIAN KINERJA',W/2,y,{align:'center'});y+=7;
+  doc.setFont('helvetica','normal');doc.setFontSize(10);t('BPS Kabupaten Kepulauan Anambas',W/2,y,{align:'center'});y+=10;
+  doc.setDrawColor(180);doc.setLineWidth(0.3);doc.line(ml,y,W-mr,y);y+=8;
+  const infoRows=[['Nama Kegiatan',v('bd_namaKegiatan')],['Tanggal',`${fmtDate(v('bd_tglMulai'))} s.d. ${fmtDate(v('bd_tglSelesai'))}`],['Lokasi',v('bd_lokasi')],['Tim',v('bd_tim')],['Indikator',v('bd_indikator')||'—']];
+  infoRows.forEach(([lb,vl])=>{ap2(10);doc.setFont('helvetica','bold');doc.setFontSize(9.5);t(lb,ml,y);doc.setFont('helvetica','normal');t(':',ml+48,y);const ls=doc.splitTextToSize(vl||'—',cw-53);ls.forEach((l,i)=>t(l,ml+51,y+i*5));y+=Math.max(ls.length*5,6);});
+  y+=4;doc.setDrawColor(180);doc.line(ml,y,W-mr,y);y+=8;
+  const pegRows=[['Nama',v('bd_namaPegawai')],['NIP',v('bd_nip')],['Jabatan',v('bd_jabatan')]];
+  doc.setFont('helvetica','bold');doc.setFontSize(11);t('Identitas Pegawai',ml,y);y+=6;
+  pegRows.forEach(([lb,vl])=>{doc.setFont('helvetica','bold');doc.setFontSize(9.5);t(lb,ml,y);doc.setFont('helvetica','normal');t(':',ml+48,y);t(vl||'—',ml+51,y);y+=6;});
+  y+=4;doc.setDrawColor(180);doc.line(ml,y,W-mr,y);y+=8;
+  doc.setFont('helvetica','bold');doc.setFontSize(11);t('Uraian Kegiatan',ml,y);y+=6;doc.setFont('helvetica','normal');doc.setFontSize(10);doc.splitTextToSize(v('bd_uraian')||'—',cw).forEach(l=>{ap2(6);t(l,ml,y);y+=5;});
+  y+=6;ap2(25);doc.setFont('helvetica','bold');doc.setFontSize(11);t('Hasil yang Dicapai',ml,y);y+=6;doc.setFont('helvetica','normal');doc.setFontSize(10);doc.splitTextToSize(v('bd_hasil')||'—',cw).forEach(l=>{ap2(6);t(l,ml,y);y+=5;});
+  if(v('bd_kendala')){y+=6;ap2(20);doc.setFont('helvetica','bold');doc.setFontSize(11);t('Kendala dan Solusi',ml,y);y+=6;doc.setFont('helvetica','normal');doc.setFontSize(10);doc.splitTextToSize(v('bd_kendala'),cw).forEach(l=>{ap2(6);t(l,ml,y);y+=5;});}
+  if(v('bd_rtl')){y+=6;ap2(20);doc.setFont('helvetica','bold');doc.setFontSize(11);t('Rencana Tindak Lanjut',ml,y);y+=6;doc.setFont('helvetica','normal');doc.setFontSize(10);doc.splitTextToSize(v('bd_rtl'),cw).forEach(l=>{ap2(6);t(l,ml,y);y+=5;});}
+  const ci=document.getElementById('bd_capList').children;
+  if(ci.length){y+=6;ap2(30);doc.setFont('helvetica','bold');doc.setFontSize(11);t('Rekapitulasi Capaian',ml,y);y+=6;const cc=[8,82,30,30],ch=['No.','Indikator','Target','Realisasi'];doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setFillColor(230,240,250);doc.rect(ml,y,cw,7,'F');let cx=ml+2;ch.forEach((h,i)=>{t(h,cx,y+5);cx+=cc[i];});y+=7;Array.from(ci).forEach((item,idx)=>{ap2(12);const il=doc.splitTextToSize(item.querySelector('.cap-ind')?.value||'—',79),rh=il.length*5+4;doc.setFont('helvetica','normal');if(idx%2===0){doc.setFillColor(248,250,252);doc.rect(ml,y,cw,rh,'F');}doc.rect(ml,y,cw,rh);cx=ml+2;t(String(idx+1),cx,y+5);cx+=cc[0];il.forEach((l,li)=>t(l,cx,y+5+li*5));cx+=cc[1];t(item.querySelector('.cap-tar')?.value||'—',cx,y+5);cx+=cc[2];t(item.querySelector('.cap-rea')?.value||'—',cx,y+5);y+=rh;});}
+  const bphotos=photoRegistries['bd'];
+  if(bphotos.length){doc.addPage();y=20;doc.setFont('helvetica','bold');doc.setFontSize(11);t('Dokumentasi Foto',ml,y);y+=8;bphotos.forEach((p,i)=>{ap2(100);const pw=cw,ph=pw*0.6;try{doc.addImage(p.src,'JPEG',ml,y,pw,ph);}catch{doc.rect(ml,y,pw,ph);}doc.setFont('helvetica','bold');doc.setFontSize(9);t(`Foto ${i+1}:`,ml,y+ph+5);doc.setFont('helvetica','normal');doc.splitTextToSize(p.caption||'—',cw-14).forEach((l,li)=>t(l,ml+14,y+ph+5+li*4.5));y+=ph+18;});}
+  const oi=document.getElementById('bd_outputList').children;
+  if(oi.length){y+=6;ap2(30);doc.setFont('helvetica','bold');doc.setFontSize(11);t('Output Kegiatan',ml,y);y+=6;const oc=[8,65,35,52],oh=['No.','Output','Bentuk','Keterangan'];doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setFillColor(230,240,250);doc.rect(ml,y,cw,7,'F');let ox=ml+2;oh.forEach((h,i)=>{t(h,ox,y+5);ox+=oc[i];});y+=7;Array.from(oi).forEach((item,idx)=>{ap2(10);const n1=doc.splitTextToSize(item.querySelector('.out-nama')?.value||'—',62),n2=doc.splitTextToSize(item.querySelector('.out-ket')?.value||'—',49),rh=Math.max(n1.length,n2.length)*5+4;doc.setFont('helvetica','normal');if(idx%2===0){doc.setFillColor(248,250,252);doc.rect(ml,y,cw,rh,'F');}doc.rect(ml,y,cw,rh);ox=ml+2;t(String(idx+1),ox,y+5);ox+=oc[0];n1.forEach((l,li)=>t(l,ox,y+5+li*5));ox+=oc[1];t(item.querySelector('.out-bentuk')?.value||'—',ox,y+5);ox+=oc[2];n2.forEach((l,li)=>t(l,ox,y+5+li*5));y+=rh;});}
+  if(v('bd_catatan')){y+=8;ap2(20);doc.setFont('helvetica','bold');doc.setFontSize(11);t('Catatan',ml,y);y+=6;doc.setFont('helvetica','normal');doc.setFontSize(10);doc.splitTextToSize(v('bd_catatan'),cw).forEach(l=>{ap2(6);t(l,ml,y);y+=5;});}
+  y+=15;ap2(40);doc.setFont('helvetica','normal');doc.setFontSize(10);t(todayStr(),W-mr,y,{align:'right'});y+=5;t(`Pegawai ${v('bd_tim')}`,W-mr,y,{align:'right'});y+=5;t('BPS Kabupaten Kepulauan Anambas',W-mr,y,{align:'right'});y+=20;doc.setFont('helvetica','bold');t(v('bd_namaPegawai')||'—',W-mr,y,{align:'right'});y+=5;doc.setFont('helvetica','normal');t(`NIP. ${v('bd_nip')||'—'}`,W-mr,y,{align:'right'});
+  doc.save(`Bukti_Dukung_${(v('bd_namaPegawai')||'Pegawai').replace(/\s+/g,'_')}_${(v('bd_namaKegiatan')||'Kegiatan').replace(/\s+/g,'_').slice(0,25)}.pdf`);
+}
+
+async function mtGeneratePDF(){
+  const{doc,W,ml,mr,cw,ap,t,hl}=makePDFBase();let y=20;
+  const ap2=(n=20)=>{if(y+n>270){doc.addPage();y=20;}};
+  doc.setFont('helvetica','bold');doc.setFontSize(13);t('LAPORAN KEGIATAN MITRA',W/2,y,{align:'center'});y+=7;
+  doc.setFont('helvetica','normal');doc.setFontSize(10);t('BPS Kabupaten Kepulauan Anambas',W/2,y,{align:'center'});y+=10;
+  doc.setDrawColor(180);doc.line(ml,y,W-mr,y);y+=8;
+  const infoRows=[['Nama Kegiatan',v('mt_namaKegiatan')],['Tanggal',`${fmtDate(v('mt_tglMulai'))} s.d. ${fmtDate(v('mt_tglSelesai'))}`],['Wilayah',v('mt_wilayah')],['Nama Mitra',v('mt_namaMitra')],['Jabatan',v('mt_jabatan')],['Nomor HP',v('mt_noHp')||'—'],['Pengawas',v('mt_pengawas')||'—']];
+  infoRows.forEach(([lb,vl])=>{ap2(10);doc.setFont('helvetica','bold');doc.setFontSize(9.5);t(lb,ml,y);doc.setFont('helvetica','normal');t(':',ml+48,y);const ls=doc.splitTextToSize(vl||'—',cw-53);ls.forEach((l,i)=>t(l,ml+51,y+i*5));y+=Math.max(ls.length*5,6);});
+  y+=4;doc.setDrawColor(180);doc.line(ml,y,W-mr,y);y+=8;
+  doc.setFont('helvetica','bold');doc.setFontSize(11);t('Hasil Pencacahan',ml,y);y+=6;doc.setFont('helvetica','normal');doc.setFontSize(10);doc.splitTextToSize(v('mt_hasil')||'—',cw).forEach(l=>{ap2(6);t(l,ml,y);y+=5;});
+  if(v('mt_kendala')){y+=6;ap2(20);doc.setFont('helvetica','bold');doc.setFontSize(11);t('Kendala',ml,y);y+=6;doc.setFont('helvetica','normal');doc.setFontSize(10);doc.splitTextToSize(v('mt_kendala'),cw).forEach(l=>{ap2(6);t(l,ml,y);y+=5;});}
+  const mphotos=photoRegistries['mt'];
+  if(mphotos.length){doc.addPage();y=20;doc.setFont('helvetica','bold');doc.setFontSize(11);t('Dokumentasi Foto',ml,y);y+=8;mphotos.forEach((p,i)=>{ap2(100);const pw=cw,ph=pw*0.6;try{doc.addImage(p.src,'JPEG',ml,y,pw,ph);}catch{doc.rect(ml,y,pw,ph);}doc.setFont('helvetica','bold');doc.setFontSize(9);t(`Foto ${i+1}:`,ml,y+ph+5);doc.setFont('helvetica','normal');doc.splitTextToSize(p.caption||'—',cw-14).forEach((l,li)=>t(l,ml+14,y+ph+5+li*4.5));y+=ph+18;});}
+  const docTypes=[{key:'kuitansi',label:'Kuitansi'},{key:'sppd',label:'SPPD'},{key:'kartu',label:'Kartu Kendali'}];
+  for(const dt of docTypes){const d=mtDocs[dt.key];if(!d)continue;doc.addPage();y=20;doc.setFont('helvetica','bold');doc.setFontSize(11);t(`Lampiran: ${dt.label}`,ml,y);y+=8;if(d.type&&d.type.startsWith('image/')){try{doc.addImage(d.data,d.type.includes('png')?'PNG':'JPEG',ml,y,cw,Math.min(cw*1.3,200));}catch{doc.rect(ml,y,cw,80);doc.setFontSize(10);t('[Gambar tidak dapat dimuat]',W/2,y+40,{align:'center'});}}else{doc.setFont('helvetica','normal');doc.setFontSize(10);t(`File: ${d.name}`,ml,y);}}
+  y+=15;ap2(40);doc.setFont('helvetica','normal');doc.setFontSize(10);t(todayStr(),W-mr,y,{align:'right'});y+=5;t(v('mt_jabatan')||'Mitra',W-mr,y,{align:'right'});y+=5;t('BPS Kabupaten Kepulauan Anambas',W-mr,y,{align:'right'});y+=20;doc.setFont('helvetica','bold');t(v('mt_namaMitra')||'—',W-mr,y,{align:'right'});
+  doc.save(`Laporan_Mitra_${(v('mt_namaMitra')||'Mitra').replace(/\s+/g,'_')}_${(v('mt_namaKegiatan')||'Kegiatan').replace(/\s+/g,'_').slice(0,25)}.pdf`);
+}
+</script>
+</body>
+</html>
